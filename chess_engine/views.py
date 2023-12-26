@@ -303,6 +303,7 @@ class GameView(LoginRequiredMixin, TemplateView):
         else:
             context['user'] = self.request.user
             context['user_is_creator'] = False
+            context['user_is_superuser'] = self.request.user.is_superuser
             creator_id = int(game_logic.game_data.get_data('game_options/creator'))
             if creator_id == self.request.user.id:
                 context['user_is_creator'] = True
@@ -349,7 +350,7 @@ class PieceActionView(View):
 
         game_logic = ChessLogic.ChessGame(user_id=self.request.user.id, game_id=game_id)
         if not game_logic:
-            print ('PieceActionView.get ERROR : game not found : %s' % game_id)
+            print('PieceActionView.get ERROR : game not found : %s' % game_id)
             return HttpResponseRedirect(reverse('home'))
 
         if action == 'select':
@@ -372,7 +373,7 @@ class PiecePromoteView(View):
 
         game_logic = ChessLogic.ChessGame(user_id=self.request.user.id, game_id=game_id)
         if not game_logic:
-            print ('PieceActionView.get ERROR : game not found : %s' % game_id)
+            print('PieceActionView.get ERROR : game not found : %s' % game_id)
             return HttpResponseRedirect(reverse('home'))
 
         role_name = kwargs['role_name']
@@ -386,7 +387,7 @@ class MenuView(View):
         game_id = self.kwargs['pk']
         game_logic = ChessLogic.ChessGame(user_id=self.request.user.id, game_id=game_id)
         if not game_logic:
-            print ('PieceActionView.get ERROR : game not found : %s' % game_id)
+            print('PieceActionView.get ERROR : game not found : %s' % game_id)
             return HttpResponseRedirect(reverse('home'))
 
         action = kwargs['action']
@@ -419,21 +420,21 @@ class MenuView(View):
                 new_index = len(saved_games) + 1
             new_index = '%03d.' % new_index
             game_logic.game_data.set_data('saved_games/%s' % new_index, saved_game)
-        elif action == 'load_previous_log':
-            token_logs = game_logic.game_data.get_data('token/logs')
-            if token_logs:
-                token_logs_len = len(token_logs)
-                if token_logs_len > 1:
-                    previous_log_index = '%03d.' % (token_logs_len - 1)
-                    kwargs['action'] = 'restore_log'
-                    kwargs['name'] = '_'
-                    kwargs['value'] = previous_log_index
-                    return HttpResponseRedirect(reverse('menu-action', kwargs=kwargs))
-                else:
-                    kwargs['action'] = 'reset_round'
-                    return HttpResponseRedirect(reverse('menu-action', kwargs=kwargs))
-            else:
-                print 'no logs to restore'
+        # elif action == 'load_previous_log':
+        #     token_logs = game_logic.game_data.get_data('token/logs')
+        #     if token_logs:
+        #         token_logs_len = len(token_logs)
+        #         if token_logs_len > 1:
+        #             previous_log_index = '%03d.' % (token_logs_len - 1)
+        #             kwargs['action'] = 'restore_log'
+        #             kwargs['name'] = '_'
+        #             kwargs['value'] = previous_log_index
+        #             return HttpResponseRedirect(reverse('menu-action', kwargs=kwargs))
+        #         else:
+        #             kwargs['action'] = 'reset_round'
+        #             return HttpResponseRedirect(reverse('menu-action', kwargs=kwargs))
+        #     else:
+        #         print 'no logs to restore'
         elif action == 'restore_log':
             log_index = kwargs['value']
             self._restore_log(source='logs', log_index=log_index, game_logic=game_logic)

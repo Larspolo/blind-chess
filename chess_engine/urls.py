@@ -10,6 +10,6 @@ urlpatterns = [
         views.PieceActionView.as_view(), name='piece-action'),
     url(r'^game/(?P<pk>[0-9]+)/board/promote/(?P<role_name>[QRBH])$',
         views.PiecePromoteView.as_view(), name='piece-promote'),
-    url(r'^game/(?P<pk>[0-9]+)/menu/(?P<action>[a-z_]+)/(?P<name>[a-z_-]+)/(?P<value>[0-9a-zA-Z_.-]+)$',
-        views.MenuView.as_view(), name='menu-action'),
+    # url(r'^game/(?P<pk>[0-9]+)/menu/(?P<action>[a-z_]+)/(?P<name>[a-z_-]+)/(?P<value>[0-9a-zA-Z_.-]+)$',
+    #     views.MenuView.as_view(), name='menu-action'),
 ]

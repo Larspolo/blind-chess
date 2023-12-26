@@ -120,6 +120,7 @@ class ChessGame:
             # return to source selection
             self.game_data.set_data('token/step/data', '.')
             self.game_data.set_data('token/step/name', 'waitCellSource')
+            self.game_data.set_data('token/step/data/impossible_move', 'invalid move')
             return False
 
         # preparation des informations additionnelles de deplacement
@@ -196,7 +197,7 @@ class ChessGame:
         if self.board.is_kingchecked(source_piece.side.name):
             print 'ChessGame.move_piece_select_target: own king is checked.'
             self._restore_context_data_from_backup(backup_before_move)
-            self.game_data.set_data('token/step/data/impossible_move', 'king_checked')
+            self.game_data.set_data('token/step/data/impossible_move', 'king would be in check')
             return False
         self.game_data.set_data('token/step/data/impossible_move', '')
 
@@ -224,6 +225,7 @@ class ChessGame:
                 move_data['target_piece'] = target_piece
 
             # passer la main
+            self.game_data.set_data('token/step/data/move', '')
             self._finalize_turn(move_data)
 
         return True

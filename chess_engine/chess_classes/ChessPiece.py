@@ -76,6 +76,13 @@ class Piece(object):
         # implementation must check path according to Piece capacities
         pass
 
+    def can_move(self):
+        for line_coord, line in self.board.grid.items():
+            for column_coord, cell in line.items():
+                if self.is_move_valid(self.x, self.y, column_coord, line_coord):
+                    return True
+        return False
+
     """ public """
 
     def is_in_danger(self, src_c, src_l):

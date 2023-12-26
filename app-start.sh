@@ -3,4 +3,6 @@ set -e
 
 python manage.py migrate
 
-python manage.py create_superuser -l "$ADMIN_USER" -e "$ADMIN_EMAIL" -p "$ADMIN_PASSWORD"
+python manage.py create_superuser -l "admin" -e "admin" -p "admin"
+
+python manage.py collectstatic --noinput
